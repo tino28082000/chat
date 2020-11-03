@@ -1,31 +1,46 @@
 chat_new = []
-def convert(filename):
+new_message = []
+
+def openfile(filename):
 	with open(filename,'r', encoding = 'utf-8') as i:
-		person = None
 		for line in i:
-			if '你傳送的時間：' in line:
-				person = 'Tino:'
-				continue
-			elif '傳送的時間：' in line:
-				continue
-			elif '前' in line:
-				continue
-			elif '媽的老頭 1.75w' in line:
-				person = '俊凱:'
-				continue
-			if person:
-				chat_new.append(person + line)
-		return chat_new
+			chat_new.append(line)
+	return chat_new
+
+
+def convert(lines):
+	person = None
+	count_tino = 0
+	count_jimmy = 0
+	for line in lines:
+		s = line.strip().split(' ')
+		name = s[1]
+		content = s[2:]
+		new_message.append(str(name) + str(content))
+		if name == 'Tino.L':
+			for m in content:
+				count_tino += len(m)
+		elif name == 'Jimmy':
+			for m in content:
+				count_jimmy += len(m)
+	print(count_tino, count_jimmy)
+	print(new_message)
+	return new_message
+
 
 def write(filename, message):
 	with open(filename,'w', encoding = 'utf-8') as o:
 		for line in message:
-			o.write(line)
+			o.write(str(line) + '\n')
 
-new_message = convert('input.txt')
-print(new_message)
-write('output.txt',new_message)
+def main(inputFileName,outputFileName): 
+	chat_new = openfile(inputFileName)
+	new_message = convert(chat_new)
+	write(outputFileName,new_message)
 
+
+
+main('[LINE]Jimmy.txt','linechat.txt')
 
 
 
